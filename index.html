@@ -1,88 +1,89 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Simon Game Deluxe</title>
-  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simon Memory Game</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <div class="app">
-    <!-- Left sidebar: Lives -->
-    <aside class="left-panel">
-      <h3>Lives</h3>
-      <div id="lives-container" class="lives">
-        <!-- hearts inserted by JS -->
-      </div>
-      <div class="difficulty">
-        <p>Difficulty</p>
-        <div id="difficulty">
-          <button class="diff-btn active" data-speed="1000">Easy</button>
-          <button class="diff-btn" data-speed="700">Medium</button>
-          <button class="diff-btn" data-speed="450">Hard</button>
-        </div>
-      </div>
-    </aside>
 
-    <!-- Main area: Title, Rules, Start, Game -->
-    <main class="main-panel">
-      <h1 id="level-title">Press Start to Begin</h1>
-      <h4 id="current-info" class="muted"></h4>
-      <h3 id="high-score">⭐ High Score: 0</h3>
-
-      <div id="rules-box" class="rules-box">
-        <h2>🕹️ How to Play</h2>
-        <ul>
-          <li>Watch the color pattern carefully.</li>
-          <li>Repeat the same pattern by clicking colored buttons.</li>
-          <li>Each round adds a new color to the sequence.</li>
-          <li>You have <b>3 lives</b>. Wrong press loses a life and repeats the same sequence.</li>
-          <li>After all lives are lost, enter your name to save your score.</li>
-        </ul>
-      </div>
-
-      <div class="controls">
-        <button id="start-btn" class="primary">Start</button>
-        <button id="reset-leaderboard" class="link">Reset Leaderboard</button>
-      </div>
-
-      <div class="container">
-        <div class="row">
-          <div type="button" id="green" class="btn green"></div>
-          <div type="button" id="red" class="btn red"></div>
-        </div>
-        <div class="row">
-          <div type="button" id="yellow" class="btn yellow"></div>
-          <div type="button" id="blue" class="btn blue"></div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Right sidebar: Leaderboard -->
-    <aside class="right-panel">
-      <h3>🏆 Leaderboard</h3>
-      <ol id="leaderboard-list" class="leaderboard">
-        <!-- leaderboard entries injected by JS -->
-      </ol>
-    </aside>
-  </div>
-
-  <!-- Name prompt modal (shown after final Game Over) -->
-  <div id="name-modal" class="modal" style="display:none;">
+  <!-- Player Name Modal -->
+  <div id="name-modal" class="modal">
     <div class="modal-content">
-      <h3>Save Your Score</h3>
-      <p>Your score: <span id="final-score">0</span></p>
-      <input id="player-name" type="text" placeholder="Enter your name (max 15 chars)" maxlength="15">
+      <h3>Enter Your Name</h3>
+      <input type="text" id="player-name" placeholder="Your Name" />
       <div class="modal-actions">
-        <button id="save-score" class="primary">Save</button>
-        <button id="skip-save" class="link">Skip</button>
+        <button id="save-name" class="primary">Save</button>
       </div>
     </div>
   </div>
 
-  <!-- jQuery and game script -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <div class="app">
+
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <h3>Lives ❤️</h3>
+      <div class="lives" id="lives">
+        <span class="heart">❤️</span>
+        <span class="heart">❤️</span>
+        <span class="heart">❤️</span>
+      </div>
+
+      <h3>Difficulty</h3>
+      <div id="difficulty">
+        <button class="diff-btn active" data-diff="easy">Easy</button>
+        <button class="diff-btn" data-diff="medium">Medium</button>
+        <button class="diff-btn" data-diff="hard">Hard</button>
+      </div>
+    </div>
+
+    <!-- Main Panel -->
+    <div class="main-panel">
+      <h1 id="level-title">Press Start to Play</h1>
+      <p class="muted">Repeat the sequence correctly to level up!</p>
+
+      <!-- Rules -->
+      <div class="rules-box">
+        <h2>Game Rules</h2>
+        <ul>
+          <li>Press <strong>Start</strong> to begin the game.</li>
+          <li>Watch the sequence of flashing buttons carefully.</li>
+          <li>Repeat the exact same pattern by clicking the buttons.</li>
+          <li>You have <strong>3 lives</strong> — a wrong move costs one!</li>
+          <li>Difficulty changes the speed of button flashes.</li>
+          <li>Your score increases with each correct level.</li>
+        </ul>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button id="start-btn" class="primary">Start</button>
+        <button id="reset-btn" class="link">Reset</button>
+      </div>
+
+      <!-- Game Buttons -->
+      <div class="container">
+        <div id="green" class="btn green"></div>
+        <div id="red" class="btn red"></div>
+        <div id="yellow" class="btn yellow"></div>
+        <div id="blue" class="btn blue"></div>
+      </div>
+
+      <p class="muted" id="click-count">Clicks: 0 / 0</p>
+    </div>
+
+    <!-- Right Panel (Leaderboard) -->
+    <div class="right-panel">
+      <h3>Leaderboard</h3>
+      <ul id="leaderboard" class="leaderboard">
+        <!-- Filled dynamically by JS -->
+      </ul>
+    </div>
+  </div>
+
   <script src="game.js"></script>
 </body>
 </html>
