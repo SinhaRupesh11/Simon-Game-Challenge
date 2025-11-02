@@ -226,6 +226,7 @@ function updateLives() {
   }
 }
 
+
 function updateClickCount() {
   $("#click-count").text(`Clicks: ${userClickedPattern.length} / ${gamePattern.length}`);
 }
