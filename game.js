@@ -10,6 +10,7 @@ let lives = 3;
 let playerName = "";
 let clickCount = 0;
 let difficulty = "easy";
+let allowClick = false; // 🚫 Prevent clicks during sequence animation
 
 // Difficulty speeds
 const speedMap = {
@@ -22,7 +23,6 @@ const speedMap = {
 // 🎮 INITIAL SETUP
 // ============================
 $(document).ready(function () {
-  // Check if we have a saved name
   if (!localStorage.getItem("playerName")) {
     $("#name-modal").fadeIn(400);
   } else {
@@ -79,7 +79,7 @@ function startGame() {
 }
 
 $(".btn").click(function () {
-  if (!started) return;
+  if (!started || !allowClick) return; // 🚫 Ignore clicks during sequence
 
   let userChosenColor = $(this).attr("id");
   userClickedPattern.push(userChosenColor);
@@ -94,6 +94,7 @@ $(".btn").click(function () {
 function checkAnswer(currentLevel) {
   if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
     if (userClickedPattern.length === gamePattern.length) {
+      allowClick = false; // Stop clicking until next sequence finishes
       setTimeout(function () {
         nextSequence();
       }, 800);
@@ -114,11 +115,14 @@ function wrongMove() {
   if (lives > 0) {
     $("#level-title").text(`Oops! ${lives} lives left. Try again.`);
     userClickedPattern = [];
+    allowClick = false; // prevent clicks during replay
+    setTimeout(() => replaySequence(), 1000);
   } else {
     gameOver();
   }
 }
 
+// Generate and show next color
 function nextSequence() {
   userClickedPattern = [];
   level++;
@@ -130,12 +134,30 @@ function nextSequence() {
   let randomChosenColor = buttonColors[randomNumber];
   gamePattern.push(randomChosenColor);
 
-  // Animate sequence
+  showSequence(); // 🔹 play the full sequence animation
+}
+
+// 🔹 Replay current sequence after mistake
+function replaySequence() {
+  showSequence();
+}
+
+// 🔹 Animate sequence and only allow clicks afterward
+function showSequence() {
+  allowClick = false; // 🚫 block clicks
   let delay = 0;
+
   gamePattern.forEach((color, i) => {
     setTimeout(() => {
       $("#" + color).fadeIn(150).fadeOut(150).fadeIn(150);
       playSound(color);
+
+      // ✅ Enable user input after the last color finishes
+      if (i === gamePattern.length - 1) {
+        setTimeout(() => {
+          allowClick = true;
+        }, 500);
+      }
     }, i * speedMap[difficulty]);
   });
 }
@@ -147,6 +169,7 @@ function gameOver() {
   playSound("wrong");
   $("#level-title").text("💀 Game Over! Press Start to Play Again");
   started = false;
+  allowClick = false;
   $("#start-btn").text("Start Again");
 
   saveScore(level);
