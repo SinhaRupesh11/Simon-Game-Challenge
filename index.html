@@ -1,41 +1,88 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
-  <title>Simon</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simon Game Deluxe</title>
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <h1 id="level-title">Press A Key to Start</h1>
-  <div class="container">
-    <div lass="row">
+  <div class="app">
+    <!-- Left sidebar: Lives -->
+    <aside class="left-panel">
+      <h3>Lives</h3>
+      <div id="lives-container" class="lives">
+        <!-- hearts inserted by JS -->
+      </div>
+      <div class="difficulty">
+        <p>Difficulty</p>
+        <div id="difficulty">
+          <button class="diff-btn active" data-speed="1000">Easy</button>
+          <button class="diff-btn" data-speed="700">Medium</button>
+          <button class="diff-btn" data-speed="450">Hard</button>
+        </div>
+      </div>
+    </aside>
 
-      <div type="button" id="green" class="btn green">
+    <!-- Main area: Title, Rules, Start, Game -->
+    <main class="main-panel">
+      <h1 id="level-title">Press Start to Begin</h1>
+      <h4 id="current-info" class="muted"></h4>
+      <h3 id="high-score">⭐ High Score: 0</h3>
 
+      <div id="rules-box" class="rules-box">
+        <h2>🕹️ How to Play</h2>
+        <ul>
+          <li>Watch the color pattern carefully.</li>
+          <li>Repeat the same pattern by clicking colored buttons.</li>
+          <li>Each round adds a new color to the sequence.</li>
+          <li>You have <b>3 lives</b>. Wrong press loses a life and repeats the same sequence.</li>
+          <li>After all lives are lost, enter your name to save your score.</li>
+        </ul>
       </div>
 
-      <div type="button" id="red" class="btn red">
-
-      </div>
-    </div>
-
-    <div class="row">
-
-      <div type="button" id="yellow" class="btn yellow">
-
-      </div>
-      <div type="button" id="blue" class="btn blue">
-
+      <div class="controls">
+        <button id="start-btn" class="primary">Start</button>
+        <button id="reset-leaderboard" class="link">Reset Leaderboard</button>
       </div>
 
-    </div>
+      <div class="container">
+        <div class="row">
+          <div type="button" id="green" class="btn green"></div>
+          <div type="button" id="red" class="btn red"></div>
+        </div>
+        <div class="row">
+          <div type="button" id="yellow" class="btn yellow"></div>
+          <div type="button" id="blue" class="btn blue"></div>
+        </div>
+      </div>
+    </main>
 
+    <!-- Right sidebar: Leaderboard -->
+    <aside class="right-panel">
+      <h3>🏆 Leaderboard</h3>
+      <ol id="leaderboard-list" class="leaderboard">
+        <!-- leaderboard entries injected by JS -->
+      </ol>
+    </aside>
   </div>
+
+  <!-- Name prompt modal (shown after final Game Over) -->
+  <div id="name-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3>Save Your Score</h3>
+      <p>Your score: <span id="final-score">0</span></p>
+      <input id="player-name" type="text" placeholder="Enter your name (max 15 chars)" maxlength="15">
+      <div class="modal-actions">
+        <button id="save-score" class="primary">Save</button>
+        <button id="skip-save" class="link">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery and game script -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="game.js"></script>
 </body>
-
 </html>
